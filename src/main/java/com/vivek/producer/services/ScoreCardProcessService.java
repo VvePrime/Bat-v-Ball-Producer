@@ -17,20 +17,16 @@ public class ScoreCardProcessService {
 	public void sendCardToProcess(String id, String scoreCard) {
 		
 		WebClient webClient = WebClient.create("http://localhost:8080");
-		Mono<Boolean> apiRes = webClient.get().uri(
+		Boolean isPresent = webClient.get().uri(
 				uriBuilder -> uriBuilder
 			    .path("/api/is-player-present")
 			    .queryParam("id", id)
 			    .build())
 		.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-	    .retrieve().bodyToMono(Boolean.class);
-		apiRes.subscribe(
-			 result -> {
-				 if(result)
-					 sendViaKafka(id, scoreCard);
-			 },			 
-			 error -> {System.out.println(error);}
-		);
+	    .retrieve().bodyToMono(Boolean.class).block();
+		
+		if(isPresent)
+			sendViaKafka(id, scoreCard);
 		
 	}
 	
