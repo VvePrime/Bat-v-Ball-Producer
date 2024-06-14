@@ -21,7 +21,7 @@ public class ScoreCardProcessService {
 		Boolean isPresent = webClient.get().uri(
 				"http://Bat-V-Ball",
 				uriBuilder -> uriBuilder
-			    .path("/api/is-player-present")
+			    .path("/api/bat-v-ball/is-player-present")
 			    .queryParam("id", id)
 			    .build())
 		.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
